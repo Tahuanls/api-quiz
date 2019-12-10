@@ -1,0 +1,15 @@
+{
+  "name": "quiz-filipe",
+  "version": "1.0.0",
+  "description": "api de quiz para projeto do filipe",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thauan Lopes",
+  "license": "ISC"
+}
