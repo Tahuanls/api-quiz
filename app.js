@@ -47,5 +47,6 @@ app.get("/api/pergunta", function(req, res){
     res.status(200).send(perguntas)
 })
 
+let PORT = process.env.PORT || 3000
 app.listen(3000);
 console.log("listening to port 3000");
