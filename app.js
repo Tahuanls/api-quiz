@@ -1,43 +1,34 @@
 const express = require("express");
 const app = express();
+const perguntaModel = require("./models/pergunta");
+const ObjectID = require("mongodb").ObjectID;
+const bodyparser = require("body-parser");
 
-let perguntas = [
-  {
-    pergunta: "pergunta 1?",
-    respostas: ["res 1", "res 2", "res 3", "res 4"],
-    certa: 3
-  },
-  {
-    pergunta: "pergunta 2?",
-    respostas: ["res 1", "res 2", "res 3", "res 4"],
-    certa: 3
-  },
-  {
-    pergunta: "pergunta 3?",
-    respostas: ["res 1", "res 2", "res 3", "res 4"],
-    certa: 3
-  },
-  {
-    pergunta: "pergunta 4?",
-    respostas: ["res 1", "res 2", "res 3", "res 4"],
-    certa: 3
-  }
-];
+// body parser stuff
+app.use(bodyparser.urlencoded({ extended: false }));
 
-const users = [
-  { id: 1, name: "Thauan Lopes" },
-  { id: 2, name: "Filipe Zanella" }
-];
+app.use(bodyparser.json());
 
 app.get("/", function(req, res) {
-  res.send("Quiz");
+  res.send("Quiz v2");
 });
 
 app.get("/api/rdn-question", function(req, res) {
-  let n = parseInt(perguntas.length * Math.random());
-  console.log(n);
-  res.type("application/json");
-  res.status(200).send(perguntas[n]);
+  perguntaModel.countDocuments(function(err, count) {
+    if (err) {
+      console.log(err);
+      res.sendStatus(403);
+    } else {
+      var random = Math.floor(Math.random() * count);
+      // console.log(random)
+      perguntaModel.findOne({}, 'pergunta respostas', { skip: random }, function(err, doc) {
+        console.log(doc);
+        console.log(doc._id);
+        res.type("application/json");
+        res.status(200).send(JSON.stringify(doc));
+      });
+    }
+  });
 });
 
 app.get("/api/pergunta/:id", function(req, res) {
@@ -52,8 +43,27 @@ app.get("/api/perguntas", function(req, res) {
   res.status(200).send(perguntas);
 });
 
+app.post("/api/verificar", function(req, res) {
+  // 5e3c6f92fdded93f306378d5
+  let resposta = req.body.resposta;
+  perguntaModel.findById("5e3c6f92fdded93f306378d5", function(err, doc) {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      //  console.log(doc)
+      console.log(doc);
+      if (doc.respostaCerta == resposta) {
+        res.status(200).send(true);
+      } else {
+        res.status(200).send(false);
+      }
+    }
+  });
+});
+
 let PORT = process.env.PORT || 3000;
 app.listen(PORT);
 console.log("listening to port 3000");
 
-let db = require('./database')
+let db = require("./database");

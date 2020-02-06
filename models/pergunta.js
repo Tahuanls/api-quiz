@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const ObjectID = require('mongodb').ObjectID
 const Schema = mongoose.Schema;
 
 const perguntaSchema = new Schema({
