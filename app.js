@@ -10,7 +10,8 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 
 app.get("/", function(req, res) {
-  res.send("Quiz v2");
+  console.log("tauan")
+  res.status(200).send("Quiz v2");
 });
 
 app.get("/api/rdn-question", function(req, res) {
@@ -53,10 +54,14 @@ app.post("/api/verificar", function(req, res) {
     } else {
       //  console.log(doc)
       console.log(doc);
+      console.log("Thauan")
+      data = {resposta: false}
+      res.type("application/json");
       if (doc.respostaCerta == resposta) {
-        res.status(200).send(true);
+        data.resposta = true;
+        res.status(200).send(JSON.stringify(data));
       } else {
-        res.status(200).send(false);
+        res.status(200).send(JSON.stringify(data));
       }
     }
   });
