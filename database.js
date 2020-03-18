@@ -29,8 +29,19 @@ async function _connect() {
         
     })
     .catch(err => {
-        console.error('Database connection error:' + err)
+        //console.error('Database connection error:' + err)
+        console.log('thauan')
     })
+
+    perguntaModel.find(function(err, pergs){
+        if(err) {
+            return console.error(err);
+        }
+        pergs.forEach(function(p){
+            console.log(p.pergunta)
+        })
+      })
 }
 
 module.exports = new Database();
+
